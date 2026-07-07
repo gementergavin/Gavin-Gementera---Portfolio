@@ -43,19 +43,6 @@ These projects were built to directly align with the responsibilities and prefer
 
 ---
 
-## Suggested Resume Bullets
-
-**IT Risk & Data Governance Framework** (Project 1)
-> Developed comprehensive IT risk register and executive dashboard for mock C2C marketplace (ReCircle); identified 18 risks across security, data quality, and vendor categories, created heat maps and KPI metrics, and documented mitigation procedures and data governance policies—mirroring GRC risk register workflows used in product administration roles.
-
-**BI Dashboard** (Project 2)
-> Built interactive executive BI dashboard processing 8,500+ operational records to deliver KPI tracking, program performance analysis, and quarterly trends; created supporting data dictionary and Power BI conversion guide to enable stakeholder reporting and decision-making.
-
-**Inventory Management System** (Project 3)
-> Designed and implemented SQL/Python inventory management system with multi-location stock tracking, transaction logging, automated reorder alerts, and data validation—demonstrating administrator-level capability with database-driven business process solutions and operational reporting.
-
----
-
 ## How to Use This Repo
 
 1. Clone or download the repository.
