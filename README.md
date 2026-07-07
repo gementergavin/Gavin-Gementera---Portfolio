@@ -23,7 +23,7 @@ These projects were built to directly align with the responsibilities and prefer
 - Formal Data Governance Policy & Procedures document
 - **Relevance:** Directly demonstrates expertise in technical policies/procedures for data management, quality assurance, and cleanup — a top preferred qualification.
 
-[→ View Project](./01_IT_Risk_Governance_Framework/README.md)
+[→ View Project](./01_IT_Risk_Governance_Framework/)
 
 ### 2. Executive Business Intelligence & Program Performance Dashboard
 - Rich Excel dashboard with 8,500+ realistic transaction records (enrollments, completions, revenue, satisfaction)
