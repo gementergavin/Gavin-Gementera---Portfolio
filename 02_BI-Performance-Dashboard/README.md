@@ -29,7 +29,3 @@ Directly demonstrates the preferred qualification:
 - Professional dashboard design in Excel
 - Business metric development and storytelling
 - Documentation for technical and non-technical audiences
-
----
-
-*Part of Gavin Gementera’s Product Solutions Portfolio — July 2026*
