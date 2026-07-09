@@ -16,13 +16,7 @@ Create a stakeholder-ready reporting solution that demonstrates the ability to t
 - Visual hierarchy suitable for executive consumption
 - Methodology and transformation logic fully documented
 - Ready-to-adapt structure for Power BI or other BI tools
-
-## Resume-Ready Bullet (Recommended)
-> Built interactive executive BI dashboard processing 8,500+ operational records to deliver KPI tracking, program performance analysis, and quarterly trends; created supporting data dictionary and Power BI conversion guide to enable stakeholder reporting and decision-making.
-
-## Relevance to Product Solutions Specialist Role
-Directly demonstrates the preferred qualification:  
-**“Expertise in developing reporting solutions and tools for external partners”** and the ability to articulate how product/solution metrics connect to organizational outcomes.
+- Built an interactive executive BI dashboard processing 8,500+ operational records to deliver KPI tracking, program performance analysis, and quarterly trends; created supporting data dictionary and Power BI conversion guide to enable stakeholder reporting and decision-making.
 
 ## Technologies & Skills
 - Data modeling and transformation
