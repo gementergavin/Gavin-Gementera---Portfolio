@@ -155,7 +155,7 @@ def show_dashboard():
     
     print(f"Total Active SKUs:          {total_skus}")
     print(f"Total Units in System:      {total_units:,}")
-    print(f"Items Below Reorder Level:  {low_stock}  {'⚠️ ACTION NEEDED' if low_stock > 0 else '✅ Good'}")
+    print(f"Items Below Reorder Level:  {low_stock}  {' ACTION NEEDED' if low_stock > 0 else ' Good'}")
     
     print("\n--- Recent Transactions (Last 5) ---")
     cursor.execute("""
