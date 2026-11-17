@@ -1,39 +1,30 @@
-# IT Risk Register, Heat Mapping & Data Governance Framework
+# IT Risk Register, Heat Map & Data Governance Framework
 
-**Mock Company:** ReCircle Marketplace (Consumer-to-Consumer Platform)
+An Excel risk register and a written data governance policy for a mock workforce training organization. It shows how an IT team can score risks, see where they cluster, and set rules for keeping data clean.
 
-## Project Goal
-Build a professional-grade IT risk management and data governance solution for a mock online marketplace, demonstrating the exact skills needed for Product Solutions / GRC / Business Process Administration roles.
+## Files
 
-## Deliverables
+| File | What's in it |
+|---|---|
+| `IT_Risk_Governance_Framework.xlsx` | Risk register (18 risks), heat map and summary, data governance procedures |
+| `Data_Governance_Policy_Procedures_Manual.pdf` | 2-page policy: data entry standards, quality audits, cleanup, change control, roles |
 
-| File | Description |
-|------|-------------|
-| `IT_Risk_Governance_Framework.xlsx` | Comprehensive risk register (18 risks), heat map, KPI dashboard, mitigation tracking, and embedded procedures |
-| `Data_Governance_Policy_Procedures_Manual.pdf` | Formal 1–2 page policy document covering data entry standards, QA, cleanup, and change control |
+## How the workbook works
 
-## Key Features
-- 18 categorized IT risks (Data Privacy & Security, Data Quality, Vendor/System Management, Operational Process, Reporting & Compliance, Business Continuity, Change & Adoption)
-- Likelihood × Impact scoring with automatic Risk Level classification and color-coded conditional formatting
-- Executive summary dashboard with heat map logic and key metrics
-- Detailed mitigation strategies and owner assignment
-- Data Governance Policy & Procedures (entry standards, monthly/quarterly audits, deduplication, change control)
+**Risk Register tab**
+- 18 risks across 7 categories: data privacy and security, data quality, system and vendor management, operations, reporting and compliance, business continuity, change and adoption.
+- Likelihood and impact are scored 1-5 (data validation blocks anything else).
+- **Risk Score** = likelihood x impact, and **Risk Level** is assigned by formula: 15+ Critical, 10-14 High, 5-9 Medium, under 5 Low. Color coding follows the level.
+- Each risk has an owner, a mitigation plan, a status and a last-reviewed date.
+- Rows 22-30 are ready for new risks; their score and level fill in automatically.
 
-## Resume-Ready Bullet (Recommended)
-> Developed comprehensive IT risk register and executive dashboard for mock C2C marketplace (ReCircle); identified 18 risks across security, data quality, and vendor categories, created heat maps and KPI metrics, and documented mitigation procedures and data governance policies—mirroring GRC risk register workflows used in product administration roles.
+**Heat Map & Summary tab**
+- Counts of risks by level and category, the average score, and how many mitigations are in progress, all calculated from the register.
+- A 5x5 heat map that counts risks by likelihood and impact, shaded by severity zone.
 
-## How This Maps to the Target Role
-This project directly addresses the preferred qualification:  
-**“Expertise implementing and maintaining technical policies and procedures around data management: data entry, data quality assurance, and data cleanup.”**
+**Data Governance Procedures tab**
+- Data entry standards, weekly and quarterly quality checks, cleanup and deduplication steps, and change control rules.
 
-It also shows the ability to create sustainable documentation and frameworks that support ongoing product administration and staff enablement.
+## Skills shown
 
-## Technologies & Skills
-- Advanced Excel (conditional formatting, data validation concepts, dashboard design)
-- Professional technical writing & policy development
-- Risk management frameworks aligned with business process solution administration
-- Cross-functional thinking (IT + Operations + Compliance)
-
----
-
-*Part of Gavin Gementera’s Product Solutions Portfolio — July 2026*
+Risk assessment, Excel formulas (COUNTIF, COUNTIFS, nested IF), data validation, conditional formatting, and policy writing.

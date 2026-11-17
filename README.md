@@ -1,36 +1,27 @@
-# Gavin Tyler Gementera — Product Solutions Portfolio
+# Gavin Gementera — IT & Data Portfolio
 
-Portfolio of hands-on projects demonstrating readiness for **Product Solutions Specialist**, Business Process Administration, Data Governance, and Reporting roles.
-
-These projects were built to directly align with the responsibilities and preferred qualifications for the role at the Academy for Professional Excellence.
-
----
+Projects I built to practice IT support, data, and governance work. I have a B.S. in Business Administration (Information Systems) from CSU Fullerton (2025).
 
 ## Projects
 
-### 1. IT Risk Register, Heat Mapping & Data Governance Framework
-**[View Project →](./01_Risk-Governance-Framework)**
+| Project | What it is | Tools |
+|---|---|---|
+| [Inventory Management System](./03_Inventory-Management-System) | Command-line app that tracks stock across 4 locations, rejects bad input, flags low stock, and logs every change. Includes 11 unit tests. | Python, SQLite, SQL |
+| [Program Performance Dashboard](./02_BI-Performance-Dashboard) | Excel dashboard built on 500 sample records: KPIs, top programs, regions, quarterly trend, charts. Every number is a live formula. | Excel |
+| [IT Risk Register & Data Governance Framework](./01_Risk-Governance-Framework) | 18 IT risks scored by likelihood and impact, a 5x5 heat map, and a 2-page data governance policy. | Excel, technical writing |
 
-- Comprehensive IT risk register with 20+ risks
-- Color-coded heat map and KPI dashboard in Excel
-- Formal Data Governance Policy & Procedures document
+## Try the inventory app
 
-### 2. Executive Business Intelligence & Program Performance Dashboard
-**[View Project →](./02_BI-Performance-Dashboard)**
+Requires Python 3.9+; nothing to install.
 
-- Executive dashboard with 8,500+ transaction records
-- KPI cards, program/region performance, quarterly trends
-- Full data dictionary + Power BI conversion guide
+```bash
+git clone https://github.com/gementergavin/Gavin-Gementera---Portfolio.git
+cd Gavin-Gementera---Portfolio/03_Inventory-Management-System
+python inventory_app.py
+```
 
-### 3. SQL & Python Inventory Management System
-**[View Project →](./03_Inventory-Management-System)**
+Run the tests with `python -m unittest discover tests` from the same folder.
 
-- Complete Python + SQLite application with CLI interface
-- Transaction logging, low-stock alerts, and reporting
-- Demonstrates admin-level database and workflow skills
+## Excel projects
 
----
-
-## How to Explore
-- Click the links above to view each project folder.
-- Each folder has its own detailed `README.md` with resume bullets and talking points.
+Download the `.xlsx` files and open them in Excel or Google Sheets. GitHub can't preview Excel files.
