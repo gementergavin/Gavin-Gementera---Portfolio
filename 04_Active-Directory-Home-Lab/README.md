@@ -1,0 +1,66 @@
+# Active Directory Home Lab
+
+A small school district network built in VirtualBox on my home PC: a Windows Server domain controller running Active Directory, DNS and DHCP, plus a Windows 11 PC joined to the domain. I use it to practice the work a help desk and junior sysadmin do every day: creating accounts, resetting passwords, setting Group Policy, and fixing access problems.
+
+The lab models **Pacific Crest Unified School District** (fictional), the same district used in my other projects: the [PowerShell toolkit](../05_PowerShell-Admin-Toolkit), [help desk tickets](../06_Help-Desk-Ticket-Portfolio), [school network design](../07_School-Network-Packet-Tracer) and [Chromebook tracker](../08_Chromebook-Device-Tracker).
+
+## What's in the lab
+
+| Piece | Details |
+|---|---|
+| Host | Windows PC, 16 GB RAM, VirtualBox |
+| DC01 | Windows Server 2025 (180-day evaluation), 4 GB RAM. Roles: AD DS, DNS, DHCP, file server |
+| CLIENT01 | Windows 11 Enterprise (90-day evaluation), 4 GB RAM, joined to the domain |
+| Network | VirtualBox NAT Network `PCUSD-Lab`, 10.0.10.0/24, internet access through NAT |
+| Domain | `pcusd.internal` (NetBIOS name `PCUSD`) |
+
+```mermaid
+flowchart LR
+    Internet((Internet)) --- NAT[VirtualBox NAT Network<br/>PCUSD-Lab 10.0.10.0/24<br/>gateway 10.0.10.1]
+    NAT --- DC01[DC01<br/>10.0.10.10<br/>AD DS, DNS, DHCP, file shares]
+    NAT --- CLIENT01[CLIENT01<br/>DHCP 10.0.10.100-200<br/>Windows 11, domain joined]
+```
+
+## What I configured
+
+- **Domain controller:** static IP, AD DS forest `pcusd.internal`, DNS with internet forwarders, DHCP scope that hands out the DC as the DNS server
+- **Organizational units:** Staff (Teachers, Office, IT), Students, Computers (Staff, Student), Groups, Disabled Accounts
+- **Users and groups:** 20 staff and students created from a CSV with my [PowerShell toolkit](../05_PowerShell-Admin-Toolkit); role-based security groups
+- **Group Policy:** password and lockout policy, mapped S: drive for staff, Control Panel blocked for students, USB storage blocked on student computers, logon banner
+- **File shares:** Staff, Students and IT shares with share and NTFS permissions set through groups (AGDLP)
+- **Help desk practice:** password resets, account unlocks, "can't open the shared drive", new hire and leaver processes (see [docs/08-help-desk-practice.md](docs/08-help-desk-practice.md))
+
+## Build guide
+
+Follow these in order. Each step ends with screenshots to take for the [screenshots](screenshots) folder.
+
+1. [Plan and downloads](docs/01-plan-and-downloads.md)
+2. [Create the virtual machines](docs/02-create-virtual-machines.md)
+3. [Build the domain controller (AD DS, DNS, DHCP)](docs/03-build-domain-controller.md)
+4. [OUs, users and groups](docs/04-ous-users-groups.md)
+5. [Join a Windows 11 PC to the domain](docs/05-join-windows-11-pc.md)
+6. [Group Policy](docs/06-group-policy.md)
+7. [File shares and permissions](docs/07-file-shares-and-permissions.md)
+8. [Help desk practice](docs/08-help-desk-practice.md)
+
+Setup scripts are in [scripts](scripts). Each one is short and commented, and every step also has GUI instructions so I know what the script is doing.
+
+## Screenshots
+
+See [screenshots/README.md](screenshots/README.md) for the list. Screenshots are added as I complete each step.
+
+## What I learned
+
+_Write 3–5 bullets here after building the lab: problems you hit and how you fixed them. Interviewers ask about this._
+
+## Interview talking points
+
+- **Why DNS matters for AD:** clients find domain controllers through DNS SRV records, so domain PCs must use the DC for DNS. Most "can't join the domain" problems are DNS problems.
+- **OUs vs groups:** OUs organize objects so Group Policy and delegation can target them; groups grant access to resources. A user is in one OU but can be in many groups.
+- **AGDLP:** permissions go to domain local groups, people go in global role groups, and role groups nest into permission groups. Access changes become one membership change.
+- **Least privilege:** the help desk group can reset passwords in the Staff and Students OUs through delegation, without being Domain Admins. I use a separate admin account for admin work.
+- **Disable, don't delete:** leavers are disabled and moved to their own OU so their files and history stay available.
+
+## Skills shown
+
+Windows Server, Active Directory Users and Computers, DNS, DHCP, Group Policy Management, NTFS and share permissions, PowerShell, VirtualBox networking, troubleshooting domain joins and logons.

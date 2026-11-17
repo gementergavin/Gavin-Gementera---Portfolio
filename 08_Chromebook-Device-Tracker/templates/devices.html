@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Devices{% endblock %}
+{% block content %}
+<h1>Devices</h1>
+
+<form class="filters" method="get" action="{{ url_for('devices') }}">
+  <input type="search" name="q" value="{{ q }}" placeholder="Asset tag, serial or model" aria-label="Search">
+  <select name="status" aria-label="Status">
+    <option value="">All statuses</option>
+    {% for s in statuses %}<option {% if s == status %}selected{% endif %}>{{ s }}</option>{% endfor %}
+  </select>
+  <select name="school" aria-label="School">
+    <option value="">All schools</option>
+    {% for s in schools %}<option {% if s == school %}selected{% endif %}>{{ s }}</option>{% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+
+<table>
+  <thead><tr><th>Asset tag</th><th>Serial</th><th>Model</th><th>School</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for d in devices %}
+    <tr>
+      <td><a href="{{ url_for('device_detail', asset_tag=d.asset_tag) }}">{{ d.asset_tag }}</a></td>
+      <td>{{ d.serial }}</td><td>{{ d.model }}</td><td>{{ d.school }}</td>
+      <td><span class="pill {{ d.status|lower|replace(' ', '-') }}">{{ d.status }}</span></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">No devices match.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="muted">{{ devices|length }} device{{ '' if devices|length == 1 else 's' }}</p>
+
+<details>
+  <summary>Add a device</summary>
+  <form class="stack" method="post" action="{{ url_for('device_new') }}">
+    <label>Asset tag <input name="asset_tag" required placeholder="CB-1061"></label>
+    <label>Serial <input name="serial" required></label>
+    <label>Model <input name="model" required placeholder="Lenovo 100e Chromebook Gen 4"></label>
+    <label>School <input name="school" required list="schools"></label>
+    <datalist id="schools">{% for s in schools %}<option value="{{ s }}">{% endfor %}</datalist>
+    <label>Purchased <input name="purchased" type="date"></label>
+    <button type="submit">Add device</button>
+  </form>
+</details>
+{% endblock %}

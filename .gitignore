@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .DS_Store
 ~$*.xlsx
+# Device tracker database (rebuild with: python seed.py)
+08_Chromebook-Device-Tracker/devices.db

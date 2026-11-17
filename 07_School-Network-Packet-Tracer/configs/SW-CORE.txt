@@ -1,0 +1,109 @@
+! =====================================================================
+! SW-CORE - district office core switch (Cisco 2960-24TT)
+! Trunks to R1 and both access switches; server and IT PC ports.
+! Paste from the "Switch>" prompt. Change CHANGE_ME_* passwords.
+! =====================================================================
+enable
+configure terminal
+hostname SW-CORE
+no ip domain-lookup
+ip domain-name pcusd.internal
+enable secret CHANGE_ME_ENABLE
+username netadmin secret CHANGE_ME_ADMIN
+service password-encryption
+banner motd # Authorized access only - Pacific Crest USD network #
+!
+! VTP transparent: each switch keeps its own VLAN list (no surprise VLAN deletions)
+vtp mode transparent
+!
+vlan 10
+ name STAFF
+vlan 20
+ name STUDENTS
+vlan 30
+ name GUEST
+vlan 40
+ name SERVERS
+vlan 99
+ name MANAGEMENT
+vlan 999
+ name BLACKHOLE
+vlan 1000
+ name NATIVE
+!
+! This switch is the spanning-tree root for every VLAN
+spanning-tree vlan 10,20,30,40,99 priority 4096
+!
+! ---------- Trunks ----------
+interface GigabitEthernet0/1
+ description Trunk to R1 G0/0/1
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 10,20,30,40,99,1000
+ switchport nonegotiate
+!
+interface FastEthernet0/23
+ description Trunk to SW-ACCESS-1 Fa0/24
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 10,20,30,40,99,1000
+ switchport nonegotiate
+!
+interface FastEthernet0/24
+ description Trunk to SW-ACCESS-2 Fa0/24
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 10,20,30,40,99,1000
+ switchport nonegotiate
+!
+! ---------- Access ports ----------
+interface FastEthernet0/1
+ description SRV-PCUSD (district server)
+ switchport mode access
+ switchport access vlan 40
+ spanning-tree portfast
+!
+interface FastEthernet0/2
+ description IT-PC
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+!
+! ---------- Unused ports: parked in a dead VLAN and shut down ----------
+interface range FastEthernet0/3 - 22
+ description Unused
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+!
+interface GigabitEthernet0/2
+ description Unused
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+!
+! ---------- Management ----------
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan99
+ description Management
+ ip address 10.10.99.2 255.255.255.0
+ no shutdown
+!
+ip default-gateway 10.10.99.1
+!
+line console 0
+ logging synchronous
+ login local
+line vty 0 15
+ login local
+ transport input ssh
+!
+end
+write memory
