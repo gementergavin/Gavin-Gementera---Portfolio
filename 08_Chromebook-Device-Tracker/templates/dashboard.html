@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<section class="cards">
+  <a class="card" href="{{ url_for('devices', status='Available') }}">
+    <span class="num">{{ d.counts['Available'] }}</span><span class="label">Available</span></a>
+  <a class="card" href="{{ url_for('devices', status='Checked out') }}">
+    <span class="num">{{ d.counts['Checked out'] }}</span><span class="label">Checked out</span></a>
+  <a class="card" href="{{ url_for('devices', status='In repair') }}">
+    <span class="num">{{ d.counts['In repair'] }}</span><span class="label">In repair</span></a>
+  <div class="card {% if d.overdue %}alert{% endif %}">
+    <span class="num">{{ d.overdue|length }}</span><span class="label">Overdue</span></div>
+  <div class="card">
+    <span class="num">${{ '{:,.2f}'.format(d.repair_cost_this_year) }}</span>
+    <span class="label">Repair cost since {{ d.school_year_start.strftime('%b %d, %Y') }}</span></div>
+</section>
+
+<h2>By school</h2>
+<table>
+  <thead><tr><th>School</th><th class="n">Devices</th><th class="n">Available</th><th class="n">Checked out</th><th class="n">In repair</th><th class="n">Retired</th></tr></thead>
+  <tbody>
+  {% for s in d.by_school %}
+    <tr>
+      <td><a href="{{ url_for('devices', school=s.school) }}">{{ s.school }}</a></td>
+      <td class="n">{{ s.total }}</td><td class="n">{{ s.available }}</td><td class="n">{{ s.checked_out }}</td>
+      <td class="n">{{ s.in_repair }}</td><td class="n">{{ s.retired }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6">No devices yet. <a href="{{ url_for('import_page') }}">Import a CSV</a> or run <code>python seed.py</code>.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>Overdue devices <a class="small" href="{{ url_for('overdue_report') }}">Download CSV</a></h2>
+<table>
+  <thead><tr><th>Asset tag</th><th>Student</th><th class="n">Grade</th><th>School</th><th>Due</th><th class="n">Days overdue</th></tr></thead>
+  <tbody>
+  {% for r in d.overdue %}
+    <tr>
+      <td><a href="{{ url_for('device_detail', asset_tag=r.asset_tag) }}">{{ r.asset_tag }}</a></td>
+      <td>{{ r.first_name }} {{ r.last_name }} ({{ r.student_number }})</td>
+      <td class="n">{{ 'K' if r.grade == 0 else r.grade }}</td><td>{{ r.school }}</td><td>{{ r.due }}</td>
+      <td class="n">{{ r.days_overdue }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6">Nothing overdue.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<p class="muted">{{ d.open_repairs }} open repair{{ '' if d.open_repairs == 1 else 's' }} · {{ d.in_service }} devices in service · {{ d.counts['Retired'] }} retired</p>
+{% endblock %}

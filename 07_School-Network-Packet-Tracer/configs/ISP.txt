@@ -1,0 +1,23 @@
+! =====================================================================
+! ISP - stands in for the internet provider (Cisco ISR4331)
+! Connects the district to the "internet" server at 198.51.100.10.
+! It needs no route to the district's 10.10.x.x networks because R1
+! translates them (NAT) to 203.0.113.2.
+! =====================================================================
+enable
+configure terminal
+hostname ISP
+no ip domain-lookup
+!
+interface GigabitEthernet0/0/0
+ description Link to district R1
+ ip address 203.0.113.1 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ description Internet server LAN
+ ip address 198.51.100.1 255.255.255.0
+ no shutdown
+!
+end
+write memory

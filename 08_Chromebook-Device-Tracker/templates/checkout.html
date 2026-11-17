@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Check out{% endblock %}
+{% block content %}
+<h1>Check out a device</h1>
+<form class="stack panel" method="post" action="{{ url_for('checkout') }}">
+  <label>Asset tag
+    <input name="asset_tag" required list="available" value="{{ asset_tag }}" placeholder="Scan or type the asset tag">
+  </label>
+  <datalist id="available">
+    {% for d in available %}<option value="{{ d.asset_tag }}">{{ d.model }} · {{ d.school }}</option>{% endfor %}
+  </datalist>
+  <label>Student ID <input name="student_id" required inputmode="numeric" value="{{ student_id }}"></label>
+  <label>Due back <input name="due" type="date" required value="{{ default_due.isoformat() }}"></label>
+  <label>Notes (optional) <input name="notes" placeholder="Charger included"></label>
+  <button type="submit">Check out</button>
+</form>
+<p class="muted">{{ available|length }} device{{ '' if available|length == 1 else 's' }} available. Year-long loans are due back {{ default_due.strftime('%B %d, %Y') }}.</p>
+{% endblock %}

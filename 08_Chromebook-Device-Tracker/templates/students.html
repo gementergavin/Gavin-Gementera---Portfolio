@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<h1>Students</h1>
+
+<form class="filters" method="get" action="{{ url_for('students') }}">
+  <input type="search" name="q" value="{{ q }}" placeholder="Name or student ID" aria-label="Search">
+  <button type="submit">Search</button>
+</form>
+
+<table>
+  <thead><tr><th>Student ID</th><th>Name</th><th class="n">Grade</th><th>School</th><th>Device</th><th>Due</th><th></th></tr></thead>
+  <tbody>
+  {% for s in students %}
+    <tr>
+      <td>{{ s.student_id }}</td><td>{{ s.last_name }}, {{ s.first_name }}</td>
+      <td class="n">{{ 'K' if s.grade == 0 else s.grade }}</td><td>{{ s.school }}</td>
+      <td>{% if s.device_tag %}<a href="{{ url_for('device_detail', asset_tag=s.device_tag) }}">{{ s.device_tag }}</a>{% endif %}</td>
+      <td>{% if s.due %}{{ s.due }}{% if s.due < today.isoformat() %} <strong class="danger">overdue</strong>{% endif %}{% endif %}</td>
+      <td>{% if not s.device_tag and s.active %}<a href="{{ url_for('checkout', student_id=s.student_id) }}">Check out</a>{% endif %}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7">No students match.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="muted">{{ students|length }} student{{ '' if students|length == 1 else 's' }}</p>
+
+<details>
+  <summary>Add a student</summary>
+  <form class="stack" method="post" action="{{ url_for('student_new') }}">
+    <label>Student ID <input name="student_id" required inputmode="numeric"></label>
+    <label>First name <input name="first_name" required></label>
+    <label>Last name <input name="last_name" required></label>
+    <label>Grade (K or 1-12) <input name="grade" required></label>
+    <label>School <input name="school" required></label>
+    <button type="submit">Add student</button>
+  </form>
+</details>
+{% endblock %}

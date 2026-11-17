@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Import{% endblock %}
+{% block content %}
+<h1>Import from CSV</h1>
+<form class="stack panel" method="post" enctype="multipart/form-data" action="{{ url_for('import_page') }}">
+  <label>What are you importing?
+    <select name="kind" required>
+      <option value="devices">Devices: asset_tag, serial, model, school (purchased optional)</option>
+      <option value="students">Students: student_id, first_name, last_name, grade, school</option>
+    </select>
+  </label>
+  <label>CSV file <input type="file" name="file" accept=".csv,text/csv" required></label>
+  <button type="submit">Import</button>
+</form>
+<p class="muted">Sample files are in the <code>sample_data</code> folder. Duplicates and bad rows are skipped and listed below; good rows are still added.</p>
+
+{% if result %}
+  <section class="panel">
+    <h2>Imported {{ result.added }} {{ result.kind }}</h2>
+    {% if result.skipped %}
+      <p>Skipped {{ result.skipped|length }} row{{ '' if result.skipped|length == 1 else 's' }}:</p>
+      <table>
+        <thead><tr><th class="n">Line</th><th>Reason</th></tr></thead>
+        <tbody>{% for line, reason in result.skipped %}<tr><td class="n">{{ line }}</td><td>{{ reason }}</td></tr>{% endfor %}</tbody>
+      </table>
+    {% endif %}
+  </section>
+{% endif %}
+{% endblock %}

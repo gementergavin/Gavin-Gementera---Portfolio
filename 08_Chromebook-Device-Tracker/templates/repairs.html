@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Repairs{% endblock %}
+{% block content %}
+<h1>Repairs</h1>
+
+<form class="filters" method="get" action="{{ url_for('repairs') }}">
+  <select name="status" aria-label="Status">
+    <option value="">All</option>
+    {% for s in ('Open', 'Fixed', 'Not repairable') %}<option {% if s == status %}selected{% endif %}>{{ s }}</option>{% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+
+<table>
+  <thead><tr><th>#</th><th>Device</th><th>School</th><th>Opened</th><th>Issue</th><th>Ticket</th><th>Status</th><th class="n">Cost</th><th></th></tr></thead>
+  <tbody>
+  {% for r in repairs %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td><a href="{{ url_for('device_detail', asset_tag=r.asset_tag) }}">{{ r.asset_tag }}</a></td>
+      <td>{{ r.school }}</td><td>{{ r.opened }}</td><td class="wrap">{{ r.issue }}</td><td>{{ r.ticket or '' }}</td><td>{{ r.status }}</td>
+      <td class="n">{{ '${:,.2f}'.format(r.cost) if r.status != 'Open' else '' }}</td>
+      <td>
+        {% if r.status == 'Open' %}
+        <form class="inline" method="post" action="{{ url_for('repair_close', repair_id=r.id) }}">
+          <input name="cost" type="number" min="0" step="0.01" placeholder="Cost" aria-label="Cost">
+          <select name="outcome" aria-label="Outcome"><option value="fixed">Fixed</option><option value="retire">Retire</option></select>
+          <button type="submit">Close</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="9">No repairs.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="muted">To send a device to repair, open it from the Devices page.</p>
+{% endblock %}

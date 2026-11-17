@@ -1,0 +1,98 @@
+! =====================================================================
+! SW-ACCESS-1 - district office access switch (Cisco 2960-24TT)
+! Staff desks (VLAN 10) and the guest Wi-Fi access point (VLAN 30).
+! Paste from the "Switch>" prompt. Change CHANGE_ME_* passwords.
+! =====================================================================
+enable
+configure terminal
+hostname SW-ACCESS-1
+no ip domain-lookup
+ip domain-name pcusd.internal
+enable secret CHANGE_ME_ENABLE
+username netadmin secret CHANGE_ME_ADMIN
+service password-encryption
+banner motd # Authorized access only - Pacific Crest USD network #
+!
+vtp mode transparent
+!
+vlan 10
+ name STAFF
+vlan 20
+ name STUDENTS
+vlan 30
+ name GUEST
+vlan 40
+ name SERVERS
+vlan 99
+ name MANAGEMENT
+vlan 999
+ name BLACKHOLE
+vlan 1000
+ name NATIVE
+!
+! ---------- Uplink ----------
+interface FastEthernet0/24
+ description Trunk to SW-CORE Fa0/23
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 10,20,30,40,99,1000
+ switchport nonegotiate
+!
+! ---------- Staff desks ----------
+interface range FastEthernet0/1 - 12
+ description Staff desk
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+!
+! ---------- Guest Wi-Fi access point ----------
+interface FastEthernet0/21
+ description AP-GUEST (SSID PCUSD-Guest)
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+!
+! ---------- Unused ----------
+interface range FastEthernet0/13 - 20
+ description Unused
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+!
+interface range FastEthernet0/22 - 23
+ description Unused
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+!
+interface range GigabitEthernet0/1 - 2
+ description Unused
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+!
+! ---------- Management ----------
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan99
+ description Management
+ ip address 10.10.99.3 255.255.255.0
+ no shutdown
+!
+ip default-gateway 10.10.99.1
+!
+line console 0
+ logging synchronous
+ login local
+line vty 0 15
+ login local
+ transport input ssh
+!
+end
+write memory

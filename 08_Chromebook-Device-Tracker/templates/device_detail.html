@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ device.asset_tag }}{% endblock %}
+{% block content %}
+<h1>{{ device.asset_tag }} <span class="pill {{ device.status|lower|replace(' ', '-') }}">{{ device.status }}</span></h1>
+<p class="muted">{{ device.model }} · Serial {{ device.serial }} · {{ device.school }}{% if device.purchased %} · Purchased {{ device.purchased }}{% endif %}</p>
+
+{% if current %}
+  <section class="panel">
+    <h2>Checked out to {{ current.first_name }} {{ current.last_name }} ({{ current.student_number }})</h2>
+    <p>Since {{ current.checked_out }}, due {{ current.due }}{% if current.due < today.isoformat() %} · <strong class="danger">overdue</strong>{% endif %}</p>
+    <form class="stack" method="post" action="{{ url_for('checkin', asset_tag=device.asset_tag) }}">
+      <label>Condition
+        <select name="condition">
+          <option>Good</option><option>Fair (normal wear)</option><option>Damaged</option>
+        </select>
+      </label>
+      <label>Damage or problem (leave blank if none: a repair opens if filled in)
+        <input name="damage" placeholder="Cracked screen, missing keys, won't charge...">
+      </label>
+      <label>Help desk ticket (optional) <input name="ticket" placeholder="HD-1006"></label>
+      <button type="submit">Check in</button>
+    </form>
+  </section>
+{% elif device.status == 'Available' %}
+  <section class="panel">
+    <a class="button" href="{{ url_for('checkout', asset_tag=device.asset_tag) }}">Check out this device</a>
+    <form class="stack" method="post" action="{{ url_for('repair_new') }}">
+      <input type="hidden" name="asset_tag" value="{{ device.asset_tag }}">
+      <label>Send to repair: problem <input name="issue" required></label>
+      <label>Help desk ticket (optional) <input name="ticket" placeholder="HD-1006"></label>
+      <button type="submit" class="secondary">Open repair</button>
+    </form>
+  </section>
+{% endif %}
+
+<h2>Repairs</h2>
+<table>
+  <thead><tr><th>#</th><th>Opened</th><th>Issue</th><th>Ticket</th><th>Status</th><th class="n">Cost</th><th>Closed</th><th></th></tr></thead>
+  <tbody>
+  {% for r in repairs %}
+    <tr>
+      <td>{{ r.id }}</td><td>{{ r.opened }}</td><td class="wrap">{{ r.issue }}</td><td>{{ r.ticket or '' }}</td>
+      <td>{{ r.status }}</td><td class="n">{{ '${:,.2f}'.format(r.cost) if r.status != 'Open' else '' }}</td><td>{{ r.closed or '' }}</td>
+      <td>
+        {% if r.status == 'Open' %}
+        <form class="inline" method="post" action="{{ url_for('repair_close', repair_id=r.id) }}">
+          <input name="cost" type="number" min="0" step="0.01" placeholder="Cost" aria-label="Cost">
+          <select name="outcome" aria-label="Outcome"><option value="fixed">Fixed</option><option value="retire">Not repairable (retire)</option></select>
+          <button type="submit">Close</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8">No repairs.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>Checkout history</h2>
+<table>
+  <thead><tr><th>Student</th><th>Checked out</th><th>Due</th><th>Returned</th><th>Condition</th></tr></thead>
+  <tbody>
+  {% for c in checkouts %}
+    <tr>
+      <td>{{ c.first_name }} {{ c.last_name }} ({{ c.student_number }})</td>
+      <td>{{ c.checked_out }}</td><td>{{ c.due }}</td><td>{{ c.returned or 'Not yet' }}</td><td>{{ c.condition_in or '' }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">Never checked out.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
