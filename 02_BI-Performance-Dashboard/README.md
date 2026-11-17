@@ -1,25 +1,29 @@
-# Executive Business Intelligence & Program Performance Dashboard
+# Program Performance Dashboard (Excel)
 
-## Project Goal
-Create a stakeholder-ready reporting solution that demonstrates the ability to turn operational data into clear, actionable insights tied to business goals.
+An Excel dashboard for a mock workforce training organization. It turns 500 transaction records into KPIs, program and region breakdowns, a quarterly trend, and two charts.
 
-## Deliverables
-- `Executive_Program_Performance_Dashboard.xlsx` — Full-featured Excel workbook with:
-  - 8,500+ realistic transaction records (enrollments, completions, revenue, satisfaction)
-  - Executive KPI dashboard (Total Revenue, Completion Rate, Satisfaction, etc.)
-  - Performance breakdowns by Program and Region
-  - Quarterly trend analysis
-  - Complete data dictionary + Power BI conversion guide
+## File
 
-## Key Features
-- Calculated metrics (Completion Rate, Revenue per Participant)
-- Visual hierarchy suitable for executive consumption
-- Methodology and transformation logic fully documented
-- Ready-to-adapt structure for Power BI or other BI tools
-- Built an interactive executive BI dashboard processing 8,500+ operational records to deliver KPI tracking, program performance analysis, and quarterly trends; created supporting data dictionary and Power BI conversion guide to enable stakeholder reporting and decision-making.
+`BI_Performance_Dashboard.xlsx`
 
-## Technologies & Skills
-- Data modeling and transformation
-- Professional dashboard design in Excel
-- Business metric development and storytelling
-- Documentation for technical and non-technical audiences
+| Tab | What's in it |
+|---|---|
+| `Transaction_Data_Sample` | 500 sample records: program, region, contract type, delivery mode, enrollment date, participants enrolled and completed, revenue, satisfaction score, fiscal year and quarter |
+| `Executive_Dashboard` | KPI cards, top 8 programs by revenue, revenue by quarter, revenue and enrollment by region, two charts |
+| `Methodology_Data_Dictionary` | Field definitions and a guide for rebuilding the dashboard in Power BI |
+
+## How it works
+
+Every number on the dashboard is a formula over the data tab, so changing or adding data updates it:
+
+- **KPIs:** total revenue, participants enrolled and completed, completion rate (completed / enrolled), average satisfaction.
+- **Top 8 programs:** a helper list (columns N-O) totals revenue for all 12 programs with `SUMIFS`; the table ranks them with `LARGE` + `INDEX`/`MATCH`, then pulls enrollment, completions, completion rate, revenue and satisfaction (`AVERAGEIFS`) for each.
+- **Quarterly trend:** `SUMIFS` on fiscal year and quarter.
+- **Regions:** `SUMIFS` on region.
+- **Charts:** a bar chart of revenue by program and a line chart of revenue by quarter, both linked to the tables.
+
+The data is synthetic, created for this project.
+
+## Skills shown
+
+Excel formulas (SUMIFS, AVERAGEIFS, INDEX/MATCH, LARGE), KPI design, charts, and a data dictionary. The methodology tab lists the DAX measures for a Power BI version.

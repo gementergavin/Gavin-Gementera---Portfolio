@@ -1,2 +1,1 @@
-# No external dependencies required for core functionality
-# For future web version: streamlit, fastapi, etc.
+# No third-party packages needed. Uses only the Python standard library (3.9+).
