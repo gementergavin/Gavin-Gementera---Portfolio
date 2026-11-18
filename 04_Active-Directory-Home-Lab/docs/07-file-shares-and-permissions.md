@@ -10,6 +10,19 @@
 
 Administrators and SYSTEM have Full Control on all three.
 
+**What you should see:** the script ends by printing the NTFS permissions. For the Students share:
+
+```
+C:\Shares\Students NT AUTHORITY\SYSTEM:(OI)(CI)(F)
+                   BUILTIN\Administrators:(OI)(CI)(F)
+                   PCUSD\DL-Students-Share-Modify:(OI)(CI)(M)
+                   PCUSD\DL-Students-Share-Read:(OI)(CI)(RX)
+
+Successfully processed 1 files; Failed processing 0 files
+```
+
+How to read it: `F` = Full control, `M` = Modify, `RX` = Read & execute. `(OI)(CI)` means the entry applies to files (object inherit) and subfolders (container inherit). There's no `(I)` on any line, which means nothing is inherited from `C:\`. If you see `BUILTIN\Users` or `(I)`, inheritance is still on.
+
 ## How the permissions work
 
 A share has two permission layers, and Windows uses the **more restrictive** one:
@@ -34,6 +47,8 @@ On CLIENT01:
 | Office staff | Open `\\DC01\IT` | Access denied |
 
 Check effective access on DC01: folder > Properties > Security > Advanced > **Effective Access** > select a user > View effective access.
+
+Then run `.\7-Test-LabHealth.ps1` on DC01. With everything built, it should show **no FAIL**. Screenshot the HTML report it saves to your Desktop as `09-lab-health-report.png`.
 
 ## Screenshots for this step
 

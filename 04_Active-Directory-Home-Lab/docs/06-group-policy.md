@@ -1,5 +1,7 @@
 # 6. Group Policy
 
+> Read [0. How it works, section 7](00-how-it-works.md#7-group-policy) first. The two ideas that prevent most GPO problems: user settings follow the user's OU and computer settings follow the computer's OU, and the last policy applied wins.
+
 ## 6.1 Create the policies
 
 **Script (on DC01):** `.\6-New-PcusdGPOs.ps1`
@@ -29,7 +31,23 @@ gpupdate /force
 gpresult /r
 ```
 
-`gpresult /r` lists which GPOs applied to the computer and to the user. Things to try:
+`gpresult /r` lists which GPOs applied to the computer and to the user.
+
+**What you should see** signed in as a student (for example `PCUSD\jayden.nguyen`), in the USER SETTINGS part:
+
+```
+USER SETTINGS
+--------------
+    CN=Jayden Nguyen,OU=Students,OU=PCUSD,DC=pcusd,DC=internal
+    ...
+    Applied Group Policy Objects
+    -----------------------------
+        PCUSD - Students - Block Control Panel
+```
+
+A standard user only sees their own USER SETTINGS. To see the computer side, open Command Prompt **as administrator** (use `PCUSD\gavin.admin`) and run `gpresult /r /scope computer`. With CLIENT01 in `Student Computers` you should see `PCUSD - Student Computers - Block USB`, `PCUSD - All Computers - Logon Banner` and `Default Domain Policy` under Applied Group Policy Objects. GPOs listed under "filtered out" with the reason **(Empty)** just have no settings for that half; that's normal.
+
+Things to try:
 
 1. **Staff test:** sign in as a teacher. The S: drive appears. Control Panel opens.
 2. **Student test:** sign in as a student. Control Panel shows a "restricted" message.
