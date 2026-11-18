@@ -14,12 +14,7 @@ The lab models **Pacific Crest Unified School District** (fictional), the same d
 | Network | VirtualBox NAT Network `PCUSD-Lab`, 10.0.10.0/24, internet access through NAT |
 | Domain | `pcusd.internal` (NetBIOS name `PCUSD`) |
 
-```mermaid
-flowchart LR
-    Internet((Internet)) --- NAT[VirtualBox NAT Network<br/>PCUSD-Lab 10.0.10.0/24<br/>gateway 10.0.10.1]
-    NAT --- DC01[DC01<br/>10.0.10.10<br/>AD DS, DNS, DHCP, file shares]
-    NAT --- CLIENT01[CLIENT01<br/>DHCP 10.0.10.100-200<br/>Windows 11, domain joined]
-```
+![Lab architecture: DC01 and CLIENT01 on the PCUSD-Lab NAT Network](diagrams/01-lab-architecture.png)
 
 ## What I configured
 
@@ -30,10 +25,19 @@ flowchart LR
 - **File shares:** Staff, Students and IT shares with share and NTFS permissions set through groups (AGDLP)
 - **Help desk practice:** password resets, account unlocks, "can't open the shared drive", new hire and leaver processes (see [docs/08-help-desk-practice.md](docs/08-help-desk-practice.md))
 
+## How it works
+
+[**0. How it works (deep dive)**](docs/00-how-it-works.md) explains the why behind every step: how clients find the domain through DNS, what happens during sign-in, how Group Policy decides what applies, and how share permissions are worked out.
+
+| Sign-in, step by step | Where each policy applies | How permissions flow |
+|---|---|---|
+| [![Sign-in flow](diagrams/02-signin-flow.png)](diagrams/02-signin-flow.png) | [![OU and GPO map](diagrams/03-ou-gpo-map.png)](diagrams/03-ou-gpo-map.png) | [![AGDLP permissions](diagrams/04-agdlp-permissions.png)](diagrams/04-agdlp-permissions.png) |
+
 ## Build guide
 
-Follow these in order. Each step ends with screenshots to take for the [screenshots](screenshots) folder.
+Follow these in order. Each step ends with screenshots to take for the [screenshots](screenshots) folder, and a "What you should see" check so you know it worked before moving on.
 
+0. [How it works (deep dive)](docs/00-how-it-works.md)
 1. [Plan and downloads](docs/01-plan-and-downloads.md)
 2. [Create the virtual machines](docs/02-create-virtual-machines.md)
 3. [Build the domain controller (AD DS, DNS, DHCP)](docs/03-build-domain-controller.md)
@@ -42,18 +46,26 @@ Follow these in order. Each step ends with screenshots to take for the [screensh
 6. [Group Policy](docs/06-group-policy.md)
 7. [File shares and permissions](docs/07-file-shares-and-permissions.md)
 8. [Help desk practice](docs/08-help-desk-practice.md)
+9. [Explaining the lab in an interview](docs/09-interview-prep.md)
+10. [Build log](docs/10-build-log.md)
 
 Setup scripts are in [scripts](scripts). Each one is short and commented, and every step also has GUI instructions so I know what the script is doing.
 
+## Checking the lab
+
+[`scripts/7-Test-LabHealth.ps1`](scripts/7-Test-LabHealth.ps1) runs 36 checks on DC01 (services, DNS records, the DHCP scope, OUs, group nesting, users, GPO links, share permissions and the client) and prints PASS, WARN or FAIL for each, with the step that fixes anything missing. It also saves an HTML report. I run it after every step to track progress.
+
 ## Screenshots
 
-See [screenshots/README.md](screenshots/README.md) for the list. Screenshots are added as I complete each step.
+See [screenshots/README.md](screenshots/README.md) for the checklist and how each one is taken. Screenshots are added as I complete each step; every one comes from my own lab.
 
 ## What I learned
 
-_Write 3–5 bullets here after building the lab: problems you hit and how you fixed them. Interviewers ask about this._
+_Write 3–5 bullets here after building the lab, from the "Problems I hit" table in the [build log](docs/10-build-log.md): what broke, how you found the cause, and how you fixed it. Interviewers ask about this._
 
 ## Interview talking points
+
+More questions, troubleshooting scenarios and a 60-second summary are in [docs/09-interview-prep.md](docs/09-interview-prep.md).
 
 - **Why DNS matters for AD:** clients find domain controllers through DNS SRV records, so domain PCs must use the DC for DNS. Most "can't join the domain" problems are DNS problems.
 - **OUs vs groups:** OUs organize objects so Group Policy and delegation can target them; groups grant access to resources. A user is in one OU but can be in many groups.

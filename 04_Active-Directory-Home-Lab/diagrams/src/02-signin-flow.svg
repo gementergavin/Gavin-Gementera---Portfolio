@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="920" viewBox="0 0 1200 920" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif">
+<title>Domain join and sign-in flow</title>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#2e5c8a"/></marker>
+  <marker id="arrowgray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#5f6b7a"/></marker>
+</defs>
+<rect width="1200" height="920" fill="#ffffff"/>
+<text x="40" y="48" font-size="26" font-weight="700" fill="#1f3864" text-anchor="start">What happens when CLIENT01 joins and a user signs in</text>
+<text x="40" y="76" font-size="15" font-weight="400" fill="#5f6b7a" text-anchor="start">Each step depends on the one before it. If CLIENT01 uses any DNS server other than DC01, step 2 fails and nothing after it works.</text>
+<rect x="140" y="100" width="240" height="60" rx="10" fill="#2e5c8a" stroke="#2e5c8a" stroke-width="0"/>
+<text x="260" y="128" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">CLIENT01</text>
+<text x="260" y="150" font-size="13" font-weight="400" fill="#dce6f2" text-anchor="middle">Windows 11</text>
+<line x1="260" y1="160" x2="260" y2="830" stroke="#c9d2dd" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="820" y="100" width="240" height="60" rx="10" fill="#1f3864" stroke="#1f3864" stroke-width="0"/>
+<text x="940" y="128" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">DC01</text>
+<text x="940" y="150" font-size="13" font-weight="400" fill="#dce6f2" text-anchor="middle">10.0.10.10</text>
+<line x1="940" y1="160" x2="940" y2="830" stroke="#c9d2dd" stroke-width="2" stroke-dasharray="6 6"/>
+<line x1="264" y1="205" x2="934" y2="205" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="205" r="15" fill="#2e5c8a"/>
+<text x="232" y="210" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="600.0" y="195" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">DHCP: Discover → Offer → Request → Acknowledge</text>
+<text x="600.0" y="227" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Gets 10.0.10.1xx, gateway 10.0.10.1, DNS server 10.0.10.10</text>
+<line x1="936" y1="259" x2="266" y2="259" stroke="#5f6b7a" stroke-width="2" marker-end="url(#arrowgray)" stroke-dasharray="6 4"/>
+<text x="600.0" y="281" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Offer and Acknowledge come back from DC01</text>
+<line x1="264" y1="317" x2="934" y2="317" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="317" r="15" fill="#2e5c8a"/>
+<text x="232" y="322" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+<text x="600.0" y="307" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">DNS: &quot;where is a domain controller for pcusd.internal?&quot;</text>
+<text x="600.0" y="339" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">SRV record _ldap._tcp.dc._msdcs.pcusd.internal → dc01</text>
+<line x1="936" y1="371" x2="266" y2="371" stroke="#5f6b7a" stroke-width="2" marker-end="url(#arrowgray)" stroke-dasharray="6 4"/>
+<text x="600.0" y="393" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Answer: dc01.pcusd.internal = 10.0.10.10</text>
+<line x1="264" y1="429" x2="934" y2="429" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="429" r="15" fill="#2e5c8a"/>
+<text x="232" y="434" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+<text x="600.0" y="419" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">Domain join (admin credentials)</text>
+<text x="600.0" y="451" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Creates the CLIENT01 computer account in AD</text>
+<line x1="264" y1="501" x2="934" y2="501" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="501" r="15" fill="#2e5c8a"/>
+<text x="232" y="506" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
+<text x="600.0" y="491" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">Computer starts up: Kerberos sign-in as CLIENT01$</text>
+<text x="600.0" y="523" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Downloads computer GPOs from SYSVOL (USB block, banner)</text>
+<line x1="264" y1="573" x2="934" y2="573" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="573" r="15" fill="#2e5c8a"/>
+<text x="232" y="578" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">5</text>
+<text x="600.0" y="563" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">User signs in as PCUSD\maria.lopez</text>
+<text x="600.0" y="595" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Kerberos checks the password and issues a ticket</text>
+<line x1="936" y1="627" x2="266" y2="627" stroke="#5f6b7a" stroke-width="2" marker-end="url(#arrowgray)" stroke-dasharray="6 4"/>
+<text x="600.0" y="649" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Ticket lists her groups: GG-Teachers, DL-Staff-Share-Modify…</text>
+<line x1="264" y1="685" x2="934" y2="685" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="685" r="15" fill="#2e5c8a"/>
+<text x="232" y="690" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
+<text x="600.0" y="675" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">User GPOs apply</text>
+<text x="600.0" y="707" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">Drive map: S: → \\DC01\Staff</text>
+<line x1="264" y1="757" x2="934" y2="757" stroke="#2e5c8a" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="232" cy="757" r="15" fill="#2e5c8a"/>
+<text x="232" y="762" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
+<text x="600.0" y="747" font-size="15" font-weight="600" fill="#1d2733" text-anchor="middle">Opens S: (SMB to \\DC01\Staff)</text>
+<text x="600.0" y="779" font-size="13" font-weight="400" fill="#5f6b7a" text-anchor="middle">NTFS checks her groups → Modify allowed</text>
+<rect x="40" y="846" width="1120" height="58" rx="10" fill="#fff4d6" stroke="#fff4d6" stroke-width="0"/>
+<text x="60" y="870" font-size="14" font-weight="700" fill="#7a5a00" text-anchor="start">Troubleshooting shortcut</text>
+<text x="60" y="891" font-size="14" font-weight="400" fill="#7a5a00" text-anchor="start">169.254.x.x address → step 1 (DHCP)  ·  &quot;Domain controller could not be contacted&quot; → step 2 (DNS)  ·  No S: drive → step 6 or 7 (GPO or groups)</text>
+</svg>

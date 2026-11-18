@@ -67,6 +67,23 @@ Get-ADUser -Filter * -SearchBase 'OU=PCUSD,DC=pcusd,DC=internal' |
 Get-ADGroupMember GG-Teachers | Select-Object Name
 ```
 
+**What you should see:** 21 accounts (the 20 from the CSV plus `gavin.admin`), all `Enabled = True`, with usernames like `maria.lopez`. Then the six teachers:
+
+```
+Name
+----
+Aaliyah Brooks
+David Chen
+Marcus Bennett
+Maria Lopez
+Priya Shah
+Sofia Ramirez
+```
+
+(The order may differ.) In ADUC, open `DL-Staff-Share-Modify` > **Members**: you should see the three groups `GG-Teachers`, `GG-Office` and `GG-IT`, not individual people. That's AGDLP.
+
+Run `.\7-Test-LabHealth.ps1` again: the **Structure** and **Users** sections should now pass.
+
 ## Screenshots for this step
 
 - `04-aduc-ou-tree.png`: ADUC showing the OU tree with some users in Teachers and Students
